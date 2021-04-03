@@ -8,10 +8,12 @@
 <%= hidden_field_tag :starting_money, @current_val %>
 <%= hidden_field_tag :hourly_rate, @current_rate %>
 
+<br/>
 Road to $1M
 <br/>
-At this pace, it'll take forever.
-What would you do?
+Currently, I'm earning $<%= @current_rate %> per hour.
+<br/>
+<div id="duration"></div>
 
 <br/>
 <%= link_to "Start part time Job", job_path(id: :part_time_job) %>

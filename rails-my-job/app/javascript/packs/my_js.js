@@ -1,15 +1,30 @@
-console.log("client index.js");
+import dayjs from 'dayjs';
+import Duration from 'dayjs/plugin/duration';
+import RelativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(Duration);
+dayjs.extend(RelativeTime);
 
 const money = document.getElementById('money');
 const title = document.getElementById('title');
+const duration = document.getElementById('duration');
 const starting_money = document.getElementById('starting_money');
 const hourly_rate = parseFloat(document.getElementById('hourly_rate').value);
 
 // Game state
 let account = parseFloat(starting_money.value);
+let remaining = 1000000 - account;
+let hours_more = remaining / hourly_rate;
+let won = remaining < 0;
 
 function earn() {
     account += second_rate();
+    remaining -= second_rate();
+    if (remaining < 0) {
+        won = true;
+    }
+    hours_more = remaining / hourly_rate;
+    console.log(second_rate(), account, remaining);
 };
 
 let beginner_job = {
@@ -34,6 +49,16 @@ const renderer = {
 
     render() {
         money.innerText = `$ ${account.toFixed(2)}`;
+        duration.innerText = this.targetText();
+    },
+
+    targetText() {
+        if(won){
+            return `You've accomplished your goal! Congrats!!`
+        }else {
+            return `At this pace, it'll take ${dayjs.duration(hours_more, 'hours').humanize()}.
+          What woudl you do?`
+        }
     },
 };
 
