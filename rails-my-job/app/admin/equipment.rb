@@ -3,7 +3,9 @@ ActiveAdmin.register Equipment do
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
   permit_params :name, :hourly_rate, :timestamps, :status,
                 job_attributes_attributes:
-                  [:name, :id, :required_months, :binary, :ditractor, :_destroy]
+                  [:name, :id, :required_months, :binary, :ditractor, :_destroy],
+                events_attributes:
+                  [:status_changed_to, :created_at, :id, :_destroy]
 
   form do |f|
     f.semantic_errors # shows errors on :base
@@ -11,6 +13,13 @@ ActiveAdmin.register Equipment do
       f.input :name
       f.input :hourly_rate
       f.input :status
+    end
+
+    f.inputs do
+      f.has_many :events, allow_destroy: true do |t|
+        t.input :status_changed_to
+        t.input :created_at
+      end
     end
 
     f.inputs do
@@ -41,6 +50,11 @@ ActiveAdmin.register Equipment do
       end
       row :job_attributes do |equipment|
         equipment.job_attributes.map(&:name)
+      end
+      row :events do |equipment|
+        equipment.events.map do |ev|
+          "#{ev.status}-#{ev.created_at}"
+        end
       end
     end
   end
