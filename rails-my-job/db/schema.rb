@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_04_163211) do
+ActiveRecord::Schema.define(version: 2021_04_04_172848) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
@@ -34,6 +34,23 @@ ActiveRecord::Schema.define(version: 2021_04_04_163211) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "status"
     t.index ["name"], name: "index_equipment_on_name", unique: true
+  end
+
+  create_table "job_attributes", force: :cascade do |t|
+    t.string "name", null: false
+    t.boolean "binary", default: false
+    t.float "required_months"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "equipment_id"
+    t.boolean "ditractor", default: false
+  end
+
+  create_table "my_attributes", force: :cascade do |t|
+    t.string "name", null: false
+    t.float "spent_months"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "references", force: :cascade do |t|

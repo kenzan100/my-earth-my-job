@@ -8,16 +8,22 @@ Hourly late: $ <%= @job.hourly_rate %> (USD)
 <%= @job.reference_link %>
 <br />
 <br />
-Success rate: 0.5
+Today's success rate: <%= @success_rate_for_today %>
 <br />
 <br />
-Supporting attrs
-<li>Casual Chat with customers</li>
-<li>Cooperative</li>
-<li>Harmonious</li>
+<div>
+  Supporting attrs
+  <% @supporting_attrs.each do |attr| %>
+    <li><%= attr.name %></li>
+  <% end %>
+</div>
 <br />
-Ditracting attrs
-<li>Not on time</li>
+<div>
+  Ditracting attrs
+  <% @distracting_attrs.each do |attr| %>
+    <li><%= attr.name %></li>
+  <% end %>
+</div>
 <br />
 <br />
-<%= button_to 'Equip', jobs_path(id: @id) %>
+<%= button_to 'Apply to this job', jobs_path(id: @id) %>

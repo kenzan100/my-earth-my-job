@@ -1,4 +1,9 @@
 class Person
+  def self.yuta
+    attrs = MyAttribute.all
+    new(attrs: attrs)
+  end
+
   def initialize(attrs: [])
     @person_attrs = attrs.group_by { |attr| attr.name }
   end
@@ -8,10 +13,10 @@ class Person
   end
 
   def success_rate(job:)
-    portion = 100 / job.required_attributes.length
+    portion = 100 / job.job_attributes.length
     penalty = 0
 
-    job.required_attributes.each do |job_attr|
+    job.job_attributes.each do |job_attr|
       found = @person_attrs[job_attr.name]&.sample
       unless found
         penalty += portion

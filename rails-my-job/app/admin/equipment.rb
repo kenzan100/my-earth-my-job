@@ -1,7 +1,9 @@
 ActiveAdmin.register Equipment do
   # See permitted parameters documentation:
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  permit_params :name, :hourly_rate, :timestamps, :status
+  permit_params :name, :hourly_rate, :timestamps, :status,
+                job_attributes_attributes:
+                  [:name, :id, :required_months, :binary, :ditractor, :_destroy]
 
   form do |f|
     f.semantic_errors # shows errors on :base
@@ -12,10 +14,20 @@ ActiveAdmin.register Equipment do
     end
 
     f.inputs do
+      f.has_many :job_attributes, allow_destroy: true do |t|
+        t.input :name
+        t.input :required_months
+        t.input :binary
+        t.input :ditractor
+      end
+    end
+
+    f.inputs do
       f.has_many :references, new_record: false do |t|
         t.input :url
       end
     end
+
     f.actions         # adds the 'Submit' and 'Cancel' buttons
   end
 
@@ -26,6 +38,9 @@ ActiveAdmin.register Equipment do
       row :status
       row :references do |equipment|
         equipment.references.map(&:url)
+      end
+      row :job_attributes do |equipment|
+        equipment.job_attributes.map(&:name)
       end
     end
   end

@@ -1,6 +1,8 @@
 class Equipment < ApplicationRecord
   has_many :references, as: :referencible
-  accepts_nested_attributes_for :references
+  has_many :job_attributes
+  accepts_nested_attributes_for :references, :job_attributes,
+                                allow_destroy: true
 
   validates_presence_of :name, :hourly_rate
   validates_numericality_of :hourly_rate

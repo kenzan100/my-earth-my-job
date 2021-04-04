@@ -1,0 +1,3 @@
+class JobAttribute < ApplicationRecord
+
+end
