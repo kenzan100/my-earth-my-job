@@ -9,7 +9,7 @@ class Person
   end
 
   def apply(job:)
-    rand(100) < success_rate(job: job)
+    rand(100) < (success_rate(job: job) + job.noise)
   end
 
   def success_rate(job:)

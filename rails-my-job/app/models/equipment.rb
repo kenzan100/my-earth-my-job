@@ -22,6 +22,19 @@ class Equipment < ApplicationRecord
     Equipment.active.sum(&:hourly_rate)
   end
 
+  def cooling_period
+    1.day
+  end
+
+  def noise
+    Rails.cache.fetch(
+      "#{cache_key_with_version}/success_rate_noise",
+      expires_in: 24.hours,
+      ) do
+      rand(-10..10)
+    end
+  end
+
   def finished?
     false
   end
