@@ -1,4 +1,7 @@
 class Equipment < ApplicationRecord
+  has_many :references, as: :referencible
+  accepts_nested_attributes_for :references
+
   validates_presence_of :name, :hourly_rate
   validates_numericality_of :hourly_rate
 
@@ -19,5 +22,9 @@ class Equipment < ApplicationRecord
 
   def finished?
     false
+  end
+
+  def reference_link
+    references.map(&:url).join(", ")
   end
 end
