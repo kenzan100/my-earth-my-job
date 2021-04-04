@@ -1,6 +1,9 @@
 class JobsController < ApplicationController
+  def new
+  end
+
   def show
-    @id = params[:id]
+    @job = Equipment.find(params[:id])
   end
 
   def create

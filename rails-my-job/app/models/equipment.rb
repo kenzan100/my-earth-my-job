@@ -2,7 +2,7 @@ class Equipment < ApplicationRecord
   validates_presence_of :name, :hourly_rate
   validates_numericality_of :hourly_rate
 
-  scope :active, -> { self.all }
+  enum status: { proposed: 1, active: 2 }, _default: :proposed
 
   def self.current_val(now)
     all.reduce(0) do |sum, equipment|

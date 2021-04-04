@@ -4,7 +4,7 @@ ActiveAdmin.register Equipment do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :name, :hourly_rate, :timestamps
+  permit_params :name, :hourly_rate, :timestamps, :status
   #
   # or
   #

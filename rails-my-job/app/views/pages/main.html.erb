@@ -1,8 +1,17 @@
 <br/>
 <br/>
 <div id="canvas">
-    <div id="title"></div>
-    <div id="money"></div>
+    <div id="title">
+      <% @equipments.each do |equipment| %>
+        <li>
+          <%= equipment.name %>
+        </li>
+      <% end %>
+    </div>
+    <div>
+      I have
+      <span id="money"></span>
+    </div>
 </div>
 
 <%= hidden_field_tag :starting_money, @current_val %>
@@ -16,6 +25,16 @@ Currently, I'm earning $<%= @current_rate %> per hour.
 <div id="duration"></div>
 
 <br/>
-<%= link_to "Start part time Job", job_path(id: :part_time_job) %>
+
+<p>Available Jobs</p>
+<% @available_jobs.each do |job| %>
+  <li>
+    <%= link_to job.name, job_path(job) %>
+  </li>
+<% end %>
+
+<br />
+
+<%= link_to "Register new job", new_admin_equipment_path %>
 
 <%= javascript_pack_tag 'my_js' %>

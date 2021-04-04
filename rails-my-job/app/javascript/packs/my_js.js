@@ -6,7 +6,6 @@ dayjs.extend(Duration);
 dayjs.extend(RelativeTime);
 
 const money = document.getElementById('money');
-const title = document.getElementById('title');
 const duration = document.getElementById('duration');
 const starting_money = document.getElementById('starting_money');
 const hourly_rate = parseFloat(document.getElementById('hourly_rate').value);
@@ -24,12 +23,10 @@ function earn() {
         won = true;
     }
     hours_more = remaining / hourly_rate;
-    console.log(second_rate(), account, remaining);
 };
 
 let beginner_job = {
     hourly_rate: hourly_rate, // 11 USD
-    title: 'Beginner Job',
 };
 
 function second_rate() {
@@ -44,7 +41,6 @@ const stopEarning = () => window.clearInterval(earningIntervalId);
 // Render init
 const renderer = {
     init() {
-        title.innerText = beginner_job.title;
     },
 
     render() {
@@ -56,8 +52,16 @@ const renderer = {
         if(won){
             return `You've accomplished your goal! Congrats!!`
         }else {
-            return `At this pace, it'll take ${dayjs.duration(hours_more, 'hours').humanize()}.
+            return `At this pace, it'll take ${this.humanReadableDuration()}.
           What woudl you do?`
+        }
+    },
+
+    humanReadableDuration() {
+        if (hours_more === Infinity) {
+            return 'forever';
+        } else {
+            return dayjs.duration(hours_more, 'hours').humanize();
         }
     },
 };
