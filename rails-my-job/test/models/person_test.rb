@@ -13,7 +13,7 @@ class PersonTest < ActiveSupport::TestCase
 
   setup do
     @job = Struct.new(
-      :required_attributes,
+      :job_attributes,
     ).new(
       [
         JobAttr.new('Comm', true, nil),
