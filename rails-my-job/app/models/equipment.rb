@@ -8,31 +8,43 @@ class Equipment < ApplicationRecord
   validates_presence_of :name, :hourly_rate
   validates_numericality_of :hourly_rate
 
-    def self.current_val(now)
-    all.reduce(0) do |sum, equipment|
-      duration_sum = equipment.total_active_duration(now)
-      sum += duration_sum.to_f * (equipment.hourly_rate / 3600)
+  class << self
+    def current_val(now)
+      all.reduce(0) do |sum, equipment|
+        duration_sum = equipment.total_active_duration(now)
+        sum += duration_sum.to_f * (equipment.hourly_rate / 3600)
+      end
     end
-  end
 
-  def self.current_rate
-    Equipment.active.sum(&:hourly_rate)
-  end
+    def current_rate
+      Equipment.active.sum(&:hourly_rate)
+    end
 
-  def self.active
-    partition[0]
-  end
+    def active
+      partition[0]
+    end
 
-  def self.proposed
-    partition[1]
-  end
+    def proposed
+      partition[1]
+    end
 
-  def self.partition
-    Equipment.all.partition do |eq|
-      eq_status = eq.events.order(:created_at).last
-      next if eq_status.nil?
+    def skills_acquired(now)
+      active.each_with_object({}) do |eq, hash|
+        hash.merge!(eq.skills_acquired(now)) do |k, old, new|
+          old + new
+        end
+      end
+    end
 
-      eq_status.active?
+    private
+
+    def partition
+      Equipment.all.partition do |eq|
+        eq_status = eq.events.order(:created_at).last
+        next if eq_status.nil?
+
+        eq_status.active?
+      end
     end
   end
 
@@ -53,8 +65,10 @@ class Equipment < ApplicationRecord
     diffs.sum
   end
 
-  def skills_acquired
-
+  def skills_acquired(now, overrides: nil)
+    job_attributes.each_with_object({}) do |ja, hash|
+      hash[ja.name] = total_active_duration(now, overrides: overrides)
+    end
   end
 
   def cooling_period

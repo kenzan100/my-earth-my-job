@@ -12,8 +12,12 @@
       I have
       <span id="money"></span>
     </div>
+    <div id="skills">
+      <%= @skills %>
+    </div>
 </div>
 
+<%= hidden_field_tag :skills, @skills %>
 <%= hidden_field_tag :starting_money, @current_val %>
 <%= hidden_field_tag :hourly_rate, @current_rate %>
 
