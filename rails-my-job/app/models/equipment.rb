@@ -67,6 +67,8 @@ class Equipment < ApplicationRecord
 
   def skills_acquired(now, overrides: nil)
     job_attributes.each_with_object({}) do |ja, hash|
+      next if ja.ditractor
+
       hash[ja.name] = total_active_duration(now, overrides: overrides)
     end
   end
