@@ -10,7 +10,7 @@ class Equipment < ApplicationRecord
 
     def self.current_val(now)
     all.reduce(0) do |sum, equipment|
-      duration_sum = equipment.total_hourly_duration(now)
+      duration_sum = equipment.total_active_duration(now)
       sum += duration_sum.to_f * (equipment.hourly_rate / 3600)
     end
   end
@@ -36,9 +36,10 @@ class Equipment < ApplicationRecord
     end
   end
 
-  def total_hourly_duration(now, overrides: nil)
+  def total_active_duration(now, overrides: nil)
     started = nil
     events_to_use = overrides || self.events.order(:created_at)
+
     diffs = events_to_use.each_with_object([]) do |ev, arr|
       started = ev.created_at if ev.active? && started.nil?
       if ev.stopped? && started
@@ -46,9 +47,14 @@ class Equipment < ApplicationRecord
         started = nil
       end
     end
+
     diffs << (now - started) if started
 
     diffs.sum
+  end
+
+  def skills_acquired
+
   end
 
   def cooling_period
