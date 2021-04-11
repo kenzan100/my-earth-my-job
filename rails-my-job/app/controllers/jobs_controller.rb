@@ -12,7 +12,7 @@ class JobsController < ApplicationController
     @supporting_attrs, @distracting_attrs = @job.job_attributes.partition do |attr|
       !attr.ditractor
     end
-    @success_rate_for_today = Person.yuta.success_rate(job: @job) + @job.noise
+    @success_rate_for_today = (Person.yuta.success_rate(job: @job) + @job.noise).round(2)
   end
 
   def create
@@ -21,7 +21,7 @@ class JobsController < ApplicationController
     text = ''
 
     if success
-      @job.active! # job accquired! congrats!
+      @job.events.create!(status: :active) # job accquired! congrats!
       text = "Job acquired! Congrats!"
     else
       text = "You could not make it. Come back in #{@job.cooling_period} seconds."

@@ -13,7 +13,7 @@
       <dt>Jobs</dt>
       <% @equipments.each do |equipment| %>
         <dd>
-          <%= equipment.name %>
+          <%= link_to equipment.name, job_path(equipment) %>
         </dd>
       <% end %>
     </dl>
