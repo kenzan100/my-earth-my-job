@@ -90,7 +90,7 @@ class Equipment < ApplicationRecord
     false
   end
 
-  def reference_link
-    references.map(&:url).join(", ")
+  def reference_links
+    references.map(&:url)
   end
 end

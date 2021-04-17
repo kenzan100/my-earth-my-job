@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_04_224318) do
+ActiveRecord::Schema.define(version: 2021_04_17_194800) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
@@ -43,6 +43,13 @@ ActiveRecord::Schema.define(version: 2021_04_04_224318) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "goods", force: :cascade do |t|
+    t.string "name"
+    t.float "price"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "job_attributes", force: :cascade do |t|
     t.string "name", null: false
     t.boolean "binary", default: false
@@ -60,6 +67,14 @@ ActiveRecord::Schema.define(version: 2021_04_04_224318) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "possessions", force: :cascade do |t|
+    t.integer "quantity"
+    t.integer "good_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["good_id"], name: "index_possessions_on_good_id"
+  end
+
   create_table "references", force: :cascade do |t|
     t.text "url", null: false
     t.string "referencible_type"
@@ -69,4 +84,13 @@ ActiveRecord::Schema.define(version: 2021_04_04_224318) do
     t.index ["referencible_type", "referencible_id"], name: "index_references_on_referencible"
   end
 
+  create_table "spends", force: :cascade do |t|
+    t.integer "good_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["good_id"], name: "index_spends_on_good_id"
+  end
+
+  add_foreign_key "possessions", "goods"
+  add_foreign_key "spends", "goods"
 end

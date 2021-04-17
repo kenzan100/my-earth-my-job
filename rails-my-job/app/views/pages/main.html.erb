@@ -1,19 +1,20 @@
-<br/>
-<br/>
+<%= render partial: "hud" %>
 <div id="canvas">
     <dl>
       <dt>Info</dt>
       <dd>Yuta</dd>
       <dd>
-        I have
-        <span id="money"></span>
+        <% @equipments.each do |equipment| %>
+          <span><%= link_to equipment.name, job_path(equipment) %></span>
+        <% end %>
       </dd>
     </dl>
-    <dl id="title">
-      <dt>Jobs</dt>
-      <% @equipments.each do |equipment| %>
+    <dl id="possession">
+      <dt>I have..</dt>
+      <dd><span id="money"></span></dd>
+      <% Possession.all.each do |possession| %>
         <dd>
-          <%= link_to equipment.name, job_path(equipment) %>
+          <%= possession.good.name %> * <%= possession.quantity %>
         </dd>
       <% end %>
     </dl>

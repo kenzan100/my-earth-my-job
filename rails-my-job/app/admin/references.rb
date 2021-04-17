@@ -11,7 +11,7 @@ ActiveAdmin.register Reference do
     f.semantic_errors # shows errors on :base
     f.inputs do
       f.input :url
-      f.input :referencible, collection: Equipment.all
+      f.input :referencible, collection: Equipment.all + Good.all
       f.input :referencible_type, input_html: { value: "Equipment" }
     end
     f.actions         # adds the 'Submit' and 'Cancel' buttons

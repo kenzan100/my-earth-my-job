@@ -4,7 +4,7 @@ class PagesController < ApplicationController
 
     @equipments = Equipment.active
     @available_jobs = Equipment.proposed
-    @current_val = Equipment.current_val(now).round(2)
+    @current_val = Equipment.current_val(now).round(2) - Spend.total
     @current_rate = Equipment.current_rate
     @skills = Equipment.skills_acquired(now)
   end

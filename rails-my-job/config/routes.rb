@@ -4,4 +4,5 @@ Rails.application.routes.draw do
   root to: 'pages#main'
 
   resources :jobs
+  resources :goods
 end

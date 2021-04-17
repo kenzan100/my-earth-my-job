@@ -1,29 +1,35 @@
 <br />
 <br />
-<%= @job.name %>
-<br />
-<br />
-Hourly late: $ <%= @job.hourly_rate %> (USD)
-<br />
-<%= @job.reference_link %>
+<dl>
+  <dt>Info</dt>
+  <dd>
+    <%= @job.name %>
+  </dd>
+  <dd>
+    Hourly late: $ <%= @job.hourly_rate %> (USD)
+  </dd>
+</dl>
+<dl>
+  <dt>References</dt>
+  <% @job.reference_links.each do |url| %>
+    <dd><%= url %></dd>
+  <% end %>
+</dl>
+<dl>
+  <dt>Supporting attributes</dt>
+  <% @supporting_attrs.each do |attr| %>
+    <dd><%= attr.name %></dd>
+  <% end %>
+</dl>
+<dl>
+  <dt>Detracting attributes</dt>
+  <% @distracting_attrs.each do |attr| %>
+    <dd><%= attr.name %></dd>
+  <% end %>
+</dl>
 <br />
 <br />
 Today's success rate: <%= @success_rate_for_today %>
-<br />
-<br />
-<div>
-  Supporting attrs
-  <% @supporting_attrs.each do |attr| %>
-    <li><%= attr.name %></li>
-  <% end %>
-</div>
-<br />
-<div>
-  Ditracting attrs
-  <% @distracting_attrs.each do |attr| %>
-    <li><%= attr.name %></li>
-  <% end %>
-</div>
 <br />
 <br />
 <%= button_to 'Apply to this job', jobs_path(id: @job.id) %>
