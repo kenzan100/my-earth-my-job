@@ -1,0 +1,59 @@
+<div id="canvas">
+  <dl>
+    <dt>Info</dt>
+    <dd>Yuta</dd>
+    <dd>
+      <% @equipments.each do |equipment| %>
+        <span><%= link_to equipment.name, job_path(equipment) %></span>
+      <% end %>
+    </dd>
+  </dl>
+  <dl id="possession">
+    <dt>I have..</dt>
+    <dd><span id="money"></span></dd>
+    <% Possession.all.each do |possession| %>
+      <dd>
+        <%= possession.good.name %> * <%= possession.quantity %>
+      </dd>
+    <% end %>
+  </dl>
+  <dl id="skills">
+    <dt>Skills</dt>
+    <% @skills.each do |name, seconds| %>
+      <dd>
+        <%= name %>
+        <%= distance_of_time_in_words seconds %>
+      </dd>
+    <% end %>
+  </dl>
+</div>
+
+<%= hidden_field_tag :starting_money, @current_val %>
+<%= hidden_field_tag :hourly_rate, @current_rate %>
+
+<dl>
+  <dt>Mission - Road to $1M</dt>
+
+  <dd>
+    Currently, I'm earning $<%= @current_rate %> per hour.
+  </dd>
+  <dd id="duration"></dd>
+</dl>
+
+<dl>
+  <dt>Available Jobs</dt>
+  <% @available_jobs.each do |job| %>
+    <dd>
+      <%= link_to job.name, job_path(job) %>
+    </dd>
+  <% end %>
+</dl>
+
+<dl>
+  <dt>Admin</dt>
+  <dd>
+    <%= link_to "Register new job", new_admin_equipment_path %>
+  </dd>
+</dl>
+
+<%= javascript_pack_tag 'my_js' %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_17_194800) do
+ActiveRecord::Schema.define(version: 2021_04_17_225908) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
@@ -82,6 +82,16 @@ ActiveRecord::Schema.define(version: 2021_04_17_194800) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["referencible_type", "referencible_id"], name: "index_references_on_referencible"
+  end
+
+  create_table "registers", force: :cascade do |t|
+    t.time "start_hour"
+    t.time "end_hour"
+    t.string "registerable_type"
+    t.integer "registerable_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["registerable_type", "registerable_id"], name: "index_registers_on_registerable"
   end
 
   create_table "spends", force: :cascade do |t|

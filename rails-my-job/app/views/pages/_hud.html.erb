@@ -1,13 +1,15 @@
-<dl>
-  <dt>Actions</dt>
-  <dd>Purchase goods</dd>
-  <dd>Adjust time</dd>
-  <dd>Look for jobs</dd>
-</dl>
+<div class="flex">
+  <dl class="max-width-3">
+    <dt>Actions</dt>
+    <dd>Purchase goods</dd>
+    <dd>Adjust time</dd>
+    <dd>Look for jobs</dd>
+  </dl>
 
-<dl>
-  <dt>Available for purchase</dt>
-  <% Good.all.each do |good| %>
-    <dd><%= link_to "Buy #{good.name}", goods_path(id: good.id), method: :post %></dd>
-  <% end %>
-</dl>
+  <dl>
+    <dt>Available for purchase</dt>
+    <% Good.all.each do |good| %>
+      <dd><%= link_to "Buy #{good.name}", goods_path(id: good.id), method: :post %></dd>
+    <% end %>
+  </dl>
+</div>

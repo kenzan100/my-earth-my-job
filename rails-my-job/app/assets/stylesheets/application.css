@@ -17,3 +17,15 @@
 #container {
     padding: 2rem 3rem;
 }
+
+.flex {
+    display: flex;
+}
+
+.flex > * {
+    flex-grow: 1;
+}
+
+.max-width-3 {
+    max-width: 300px;
+}

@@ -1,0 +1,29 @@
+<dl>
+  <dt>Calendar</dt>
+  <dd>
+    <%= form_tag(:registers) do %>
+      <%= select_time(Time.now.beginning_of_hour, prefix: :starting) %>
+      ~
+      <%= select_time((Time.now + 2.hour).beginning_of_hour, prefix: :ending)  %>
+      <%= select_tag(:registerable, options_from_collection_for_select(@registerables, :id, :name)) %>
+      <%= submit_tag %>
+    <% end %>
+  </dd>
+</dl>
+
+<div>
+  <strong>On day</strong>
+  <dl>
+    <% Register.order(:start_hour).each do |reg| %>
+      <dd>
+        <%= reg.start_hour.strftime("%R") %> ~ <%= reg.end_hour.strftime("%R") %>
+        -
+        <%= reg.registerable.name %>
+      </dd>
+    <% end %>
+  </dl>
+</div>
+
+<div>
+  <strong>Off day</strong>
+</div>
