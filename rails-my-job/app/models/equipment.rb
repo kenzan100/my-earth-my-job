@@ -9,13 +9,6 @@ class Equipment < ApplicationRecord
   validates_numericality_of :hourly_rate
 
   class << self
-    def current_val(now)
-      all.reduce(0) do |sum, equipment|
-        duration_sum = equipment.total_active_duration(now)
-        sum += duration_sum.to_f * (equipment.hourly_rate / 3600)
-      end
-    end
-
     def current_rate
       Equipment.active.sum(&:hourly_rate)
     end
@@ -48,28 +41,11 @@ class Equipment < ApplicationRecord
     end
   end
 
-  def total_active_duration(now, overrides: nil)
-    started = nil
-    events_to_use = overrides || self.events.order(:created_at)
-
-    diffs = events_to_use.each_with_object([]) do |ev, arr|
-      started = ev.created_at if ev.active? && started.nil?
-      if ev.stopped? && started
-        arr << ev.created_at - started
-        started = nil
-      end
-    end
-
-    diffs << (now - started) if started
-
-    diffs.sum
-  end
-
   def skills_acquired(now, overrides: nil)
     job_attributes.each_with_object({}) do |ja, hash|
       next if ja.ditractor
 
-      hash[ja.name] = total_active_duration(now, overrides: overrides)
+      hash[ja.name] = Domains::Time.total_active_duration(self, now, overrides: overrides)
     end
   end
 
