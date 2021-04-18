@@ -26,35 +26,50 @@ module Domains
 
     private
 
+    PointInTime = Struct.new(:timestamp, :starting_type, :stopping_type, :multiplier)
+
+    def destructure(time_speeds)
+      time_speeds.flat_map do |ts|
+        [
+          PointInTime.new(ts.starting, true, true, ts.multiplier),
+          PointInTime.new(ts.ending, true, true, 1)
+        ]
+      end
+    end
+
     def game_time(starting, ending, time_speeds)
       return (ending - starting) if time_speeds.empty?
 
-      # discard the time_speeds range nothing to do with given duration
-      time_speeds = time_speeds.reject { |ts| (ts.ending < starting) || (ts.starting > ending) }
+      starting = PointInTime.new(starting, true, false, 1)
+      ending =   PointInTime.new(ending, false, true, 1)
 
-      start_and_end = []
-      first_bit = (time_speeds.first.starting - starting)
-      last_bit  = (ending - time_speeds.last.ending)
-      start_and_end << first_bit if first_bit.positive?
-      start_and_end << last_bit if last_bit.positive?
-
-      prev_ending = nil
-      time_speeds_affected = time_speeds.each_with_object([]).with_index do |(ts, arr), i|
-        starting = i == 0 ? [starting, ts.starting].max : ts.starting
-        ending   = i == (time_speeds.length - 1) ? [ending, ts.ending].min : ts.ending
-
-        # account for the ranges in between
-        if prev_ending && (starting - prev_ending).positive?
-          arr << (starting - prev_ending)
-        end
-
-        arr << (ending - starting) * ts.multiplier
-        prev_ending = ending
+      if time_speeds.first && time_speeds.first.ending.between?(starting.timestamp, ending.timestamp)
+        starting.multiplier = time_speeds.first.multiplier
       end
 
-      pp time_speeds_affected
+      points_in_time = (destructure(time_speeds) + [starting, ending]).sort_by(&:timestamp)
+      points_in_time.reject! do |pit|
+        pit.timestamp < starting.timestamp || pit.timestamp > ending.timestamp
+      end
 
-      [start_and_end, time_speeds_affected].flatten.sum
+      started = nil
+      durations = points_in_time.each_with_object([]) do |pit, arr|
+        if started.nil? && pit.starting_type
+          started = pit
+          next
+        end
+
+        if started && pit.stopping_type
+          arr << (pit.timestamp - started.timestamp) * started.multiplier
+          started = pit.starting_type ? pit : nil
+        end
+      end
+
+      if started && started != ending
+        durations << (ending.timestamp - started.timestamp) * started.multiplier
+      end
+
+      durations.sum
     end
   end
 end

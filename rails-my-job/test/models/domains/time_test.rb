@@ -40,7 +40,13 @@ class DomainsMoneyTest < ActiveSupport::TestCase
       }
     )
 
-    assert_equal 0, res.round
+    # 1 day  of speeding at 2x (11 days ago ~ 10 days ago)
+    # 2 days of speeding at 3x (8 days ago ~ 6 days ago)
+    # 1 day  of speedign at 4x (2 days ago ~ 1 day ago)
+    # 6 days of normal speed (1x speed)
+
+    expected = (1.day * 2) + (2.days * 3) + (1.day * 4) + (6.days)
+    assert_equal expected.to_i, res.round
   end
 end
 
