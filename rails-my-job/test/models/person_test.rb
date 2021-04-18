@@ -28,20 +28,20 @@ class PersonTest < ActiveSupport::TestCase
   end
 
   test 'success detects binary person attr' do
-    person_attrs = [
-      PersonAttr.new('Comm', 1)
-    ]
+    person_attrs = {
+      'Comm' => 1000
+    }
     result = Person.new(attrs: person_attrs).success_rate(job: @job)
     assert_equal 50, result
   end
 
   test 'success detects progressive person attr' do
-    person_attrs = [
-      PersonAttr.new('Non-Skill', 1),
-      PersonAttr.new('Comm', 1),
-      PersonAttr.new('Coding', 10)
-    ]
+    person_attrs = {
+      'Non-Skill' => 1,
+      'Comm' => 1,
+      'Coding' => 10.months.to_i
+    }
     result = Person.new(attrs: person_attrs).success_rate(job: @job)
-    assert_equal 75, result
+    assert_equal 75, result.round
   end
 end
