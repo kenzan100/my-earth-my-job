@@ -11,7 +11,7 @@ class EquipmentTest < ActiveSupport::TestCase
     eq.events.build(created_at: 11.hours.ago, status: :stopped)
     eq.events.build(created_at: 10.hours.ago, status: :active)
 
-    res = eq.skills_acquired(Time.now, overrides: eq.events)
+    res = eq.skills_acquired(Time.now, overrides: { Event => eq.events })
     res.transform_values! { |v| v.round }
     assert_equal({ "1" => 75600 }, res)
   end

@@ -45,7 +45,7 @@ class Equipment < ApplicationRecord
     job_attributes.each_with_object({}) do |ja, hash|
       next if ja.ditractor
 
-      hash[ja.name] = Domains::Time.total_active_duration(self, now, overrides: overrides)
+      hash[ja.name] = Domains::Time.new(self).total_active_duration(now, overrides: overrides)
     end
   end
 

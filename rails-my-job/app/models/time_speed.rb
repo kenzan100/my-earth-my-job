@@ -1,0 +1,2 @@
+class TimeSpeed < ApplicationRecord
+end
