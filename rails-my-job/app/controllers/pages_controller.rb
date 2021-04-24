@@ -8,6 +8,8 @@ class PagesController < ApplicationController
     @available_jobs = Equipment.proposed
     @current_val = Domains::Money.current_val(now).round(2) - Spend.total
     @current_rate = Equipment.current_rate
+    @running_speed = TimeSpeed.find_by(ending: nil)&.multiplier || 1
+
     @skills = Equipment.skills_acquired(now)
   end
 

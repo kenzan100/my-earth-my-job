@@ -9,6 +9,7 @@ const money = document.getElementById('money');
 const duration = document.getElementById('duration');
 const starting_money = document.getElementById('starting_money');
 const hourly_rate = parseFloat(document.getElementById('hourly_rate').value);
+const timespeed = parseFloat(document.getElementById('running_speed').value);
 
 // Game state
 let account = parseFloat(starting_money.value);
@@ -30,10 +31,10 @@ let beginner_job = {
 };
 
 function second_rate() {
-    return beginner_job.hourly_rate / 3600;
+    return beginner_job.hourly_rate / 3600 * timespeed / 10;
 };
 
-const earningIntervalId = window.setInterval(earn, 1000);
+const earningIntervalId = window.setInterval(earn, 100);
 
 const stopEarning = () => window.clearInterval(earningIntervalId);
 // window.setTimeout(stopEarning, 5000);

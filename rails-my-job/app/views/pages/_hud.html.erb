@@ -13,7 +13,9 @@
     <% end %>
     <dd>
       Accelerate time
-      <% link_to "1x" %>
+      <%= link_to "1x", times_path(multiplier: 1), method: :post %>
+      <%= link_to "10x", times_path(multiplier: 10), method: :post %>
+      <%= link_to "100x", times_path(multiplier: 100), method: :post %>
     </dd>
   </dl>
 </div>

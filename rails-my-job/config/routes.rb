@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   resources :jobs
   resources :goods
   resources :registers
+  resources :times
 end
