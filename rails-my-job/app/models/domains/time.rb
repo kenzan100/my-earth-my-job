@@ -43,12 +43,14 @@ module Domains
       starting = PointInTime.new(starting, true, false, 1)
       ending =   PointInTime.new(ending, false, true, 1)
 
-      if time_speeds.first && time_speeds.first.ending.between?(starting.timestamp, ending.timestamp)
+      # if the boost time predates the beginning of event time, use that multiplier first
+      if time_speeds.first.affects?(starting.timestamp)
         starting.multiplier = time_speeds.first.multiplier
       end
 
-      points_in_time = (destructure(time_speeds) + [starting, ending]).sort_by(&:timestamp)
+      points_in_time = (destructure(time_speeds) + [starting, ending]).sort_by { |pit| pit.timestamp.to_i || Float::INFINITY }
       points_in_time.reject! do |pit|
+        next true if pit.timestamp.nil?
         pit.timestamp < starting.timestamp || pit.timestamp > ending.timestamp
       end
 

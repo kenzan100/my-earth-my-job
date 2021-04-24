@@ -21,7 +21,28 @@ class DomainsMoneyTest < ActiveSupport::TestCase
     assert_equal 21.hours.to_i, res.round
   end
 
-  test 'duration takes into account of TimeSpeed' do
+  test 'duration can accept TimeSpeed with ending nil' do
+    eq = Equipment.new
+    # if not timespeed, 10 days
+    eq.events.build(created_at: 11.days.ago, status: :active)
+    eq.events.build(created_at: 1.day.ago, status: :stopped)
+
+    res = Domains::Time.new(eq).total_active_duration(
+      Time.now,
+      overrides: {
+        Event => eq.events,
+        TimeSpeed => [
+          TimeSpeed.new(starting: 15.days.ago, ending: 10.days.ago, multiplier: 2),
+          TimeSpeed.new(starting: 2.days.ago, ending: nil, multiplier: 3),
+        ],
+      }
+    )
+
+    expected = (1.day * 2) + (1.days * 3) + (8.days)
+    assert_equal expected.to_i, res.round
+  end
+
+  test 'XYZ duration takes into account of TimeSpeed' do
     eq = Equipment.new
     # if not timespeed, 10 days
     eq.events.build(created_at: 11.days.ago, status: :active)
