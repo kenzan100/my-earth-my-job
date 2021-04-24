@@ -41,7 +41,7 @@ class Equipment < ApplicationRecord
     end
   end
 
-  def skills_acquired(now, overrides: nil)
+  def skills_acquired(now, overrides: {})
     job_attributes.each_with_object({}) do |ja, hash|
       next if ja.ditractor
 

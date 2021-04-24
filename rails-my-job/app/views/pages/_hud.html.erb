@@ -7,9 +7,13 @@
   </dl>
 
   <dl>
-    <dt>Available for purchase</dt>
+    <dt>Available commands</dt>
     <% Good.all.each do |good| %>
       <dd><%= link_to "Buy #{good.name}", goods_path(id: good.id), method: :post %></dd>
     <% end %>
+    <dd>
+      Accelerate time
+      <% link_to "1x" %>
+    </dd>
   </dl>
 </div>

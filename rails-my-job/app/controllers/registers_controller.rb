@@ -8,7 +8,7 @@ class RegistersController < ApplicationController
       registerable_type: eq.class.to_s,
       registerable_id: eq.id
     )
-    redirect_to calendar_path
+    redirect_to root_path
   end
 
   private
