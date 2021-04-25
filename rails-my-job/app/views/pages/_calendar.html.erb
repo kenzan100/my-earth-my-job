@@ -5,7 +5,7 @@
       <%= select_time(Time.now.beginning_of_hour, prefix: :starting) %>
       ~
       <%= select_time((Time.now + 2.hour).beginning_of_hour, prefix: :ending)  %>
-      <%= select_tag(:registerable, options_from_collection_for_select(@registerables, :id, :name)) %>
+      <%= select_tag(:registerable, options_from_collection_for_select(@registerables, :polymorphic_select_option_id, :name)) %>
       <%= submit_tag %>
     <% end %>
   </dd>

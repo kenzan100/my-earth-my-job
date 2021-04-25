@@ -8,6 +8,8 @@ class Equipment < ApplicationRecord
   validates_presence_of :name, :hourly_rate
   validates_numericality_of :hourly_rate
 
+  include PolymorphicSelectable
+
   class << self
     def current_rate
       Equipment.active.sum(&:hourly_rate)

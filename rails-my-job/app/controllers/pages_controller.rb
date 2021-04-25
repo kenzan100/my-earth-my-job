@@ -22,6 +22,6 @@ class PagesController < ApplicationController
   private
 
   def set_registerables
-    @registerables = Equipment.active
+    @registerables = Equipment.active + Good.posessing
   end
 end

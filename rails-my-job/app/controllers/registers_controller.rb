@@ -1,6 +1,7 @@
 class RegistersController < ApplicationController
   def create
-    eq = Equipment.find(params['registerable'])
+    # TODO: Don't trust the params in production
+    eq = PolymorphicSelectable.find_polymorphic_selectable(params['registerable'])
     now = Time.now
     Register.create!(
       start_hour: parse_time(now, 'starting'),
