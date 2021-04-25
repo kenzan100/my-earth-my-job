@@ -41,11 +41,19 @@ class Equipment < ApplicationRecord
     end
   end
 
-  def skills_acquired(now, overrides: {})
+  def events_to_use
+    if events.any? { |ev| ev.new_record? }
+      events.sort_by(&:created_at)
+    else
+      events.order(:created_at)
+    end
+  end
+
+  def skills_acquired(now)
     job_attributes.each_with_object({}) do |ja, hash|
       next if ja.ditractor
 
-      hash[ja.name] = Domains::Time.new(self).total_active_duration(now, overrides: overrides)
+      hash[ja.name] = Domains::Time.new(now).total_active_duration(self)
     end
   end
 

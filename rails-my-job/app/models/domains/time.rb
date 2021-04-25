@@ -1,25 +1,25 @@
 module Domains
   class Time
-    attr_reader :equipment
-    def initialize(equipment)
-      @equipment = equipment
+    attr_reader :now, :time_speeds
+
+    def initialize(now, time_speeds: nil)
+      @now = now
+      @time_speeds = time_speeds&.sort_by(&:starting) || TimeSpeed.order(:starting)
     end
 
-    def total_active_duration(now, overrides: {})
+    def total_active_duration(equipment)
       started = nil
-
-      events_to_use = overrides[Event]&.sort_by(&:created_at) || equipment.events.order(:created_at)
-      time_speeds = overrides[TimeSpeed]&.sort_by(&:starting) || TimeSpeed.order(:starting)
+      events_to_use = equipment.events_to_use
 
       diffs = events_to_use.each_with_object([]) do |ev, arr|
         started = ev.created_at if ev.active? && started.nil?
         if ev.stopped? && started
-          arr << game_time(started, ev.created_at, time_speeds)
+          arr << game_time(started, ev.created_at)
           started = nil
         end
       end
 
-      diffs << game_time(started, now, time_speeds) if started
+      diffs << game_time(started, now) if started
 
       diffs.sum
     end
@@ -28,7 +28,7 @@ module Domains
 
     PointInTime = Struct.new(:timestamp, :starting_type, :stopping_type, :multiplier)
 
-    def destructure(time_speeds)
+    def destructured_time_speeds
       time_speeds.flat_map do |ts|
         [
           PointInTime.new(ts.starting, true, true, ts.multiplier),
@@ -37,7 +37,7 @@ module Domains
       end
     end
 
-    def game_time(starting, ending, time_speeds)
+    def game_time(starting, ending)
       return (ending - starting) if time_speeds.empty?
 
       starting = PointInTime.new(starting, true, false, 1)
@@ -48,7 +48,7 @@ module Domains
         starting.multiplier = time_speeds.first.multiplier
       end
 
-      points_in_time = (destructure(time_speeds) + [starting, ending]).sort_by { |pit| pit.timestamp.to_i || Float::INFINITY }
+      points_in_time = (destructured_time_speeds + [starting, ending]).sort_by { |pit| pit.timestamp.to_i || Float::INFINITY }
       points_in_time.reject! do |pit|
         next true if pit.timestamp.nil?
         pit.timestamp < starting.timestamp || pit.timestamp > ending.timestamp

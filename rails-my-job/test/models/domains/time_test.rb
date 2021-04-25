@@ -5,7 +5,7 @@ class DomainsMoneyTest < ActiveSupport::TestCase
     eq.events.build(created_at: 1.day.ago, status: :active)
     eq.events.build(created_at: 10.hours.ago, status: :active)
 
-    res = Domains::Time.new(eq).total_active_duration(Time.now, overrides: { Event => eq.events })
+    res = Domains::Time.new(Time.now).total_active_duration(eq)
     assert_equal 1.day.to_i, res.round
   end
 
@@ -17,7 +17,7 @@ class DomainsMoneyTest < ActiveSupport::TestCase
     eq.events.build(created_at: 11.hours.ago, status: :stopped)
     eq.events.build(created_at: 10.hours.ago, status: :active)
 
-    res = Domains::Time.new(eq).total_active_duration(Time.now, overrides: { Event => eq.events })
+    res = Domains::Time.new(Time.now).total_active_duration(eq)
     assert_equal 21.hours.to_i, res.round
   end
 
@@ -27,16 +27,12 @@ class DomainsMoneyTest < ActiveSupport::TestCase
     eq.events.build(created_at: 11.days.ago, status: :active)
     eq.events.build(created_at: 1.day.ago, status: :stopped)
 
-    res = Domains::Time.new(eq).total_active_duration(
-      Time.now,
-      overrides: {
-        Event => eq.events,
-        TimeSpeed => [
-          TimeSpeed.new(starting: 15.days.ago, ending: 10.days.ago, multiplier: 2),
-          TimeSpeed.new(starting: 2.days.ago, ending: nil, multiplier: 3),
-        ],
-      }
-    )
+    time_speeds = [
+      TimeSpeed.new(starting: 15.days.ago, ending: 10.days.ago, multiplier: 2),
+      TimeSpeed.new(starting: 2.days.ago, ending: nil, multiplier: 3),
+    ]
+
+    res = Domains::Time.new(Time.now, time_speeds: time_speeds).total_active_duration(eq)
 
     expected = (1.day * 2) + (1.days * 3) + (8.days)
     assert_equal expected.to_i, res.round
@@ -53,13 +49,7 @@ class DomainsMoneyTest < ActiveSupport::TestCase
       TimeSpeed.new(starting: 8.days.ago,  ending: 6.days.ago,        multiplier: 3),
       TimeSpeed.new(starting: 2.days.ago,  ending: Time.now + 2.days, multiplier: 4),
     ]
-    res = Domains::Time.new(eq).total_active_duration(
-      Time.now,
-      overrides: {
-        Event => eq.events,
-        TimeSpeed => speed_changes
-      }
-    )
+    res = Domains::Time.new(Time.now, time_speeds: speed_changes).total_active_duration(eq)
 
     # 1 day  of speeding at 2x (11 days ago ~ 10 days ago)
     # 2 days of speeding at 3x (8 days ago ~ 6 days ago)
