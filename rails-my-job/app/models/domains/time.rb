@@ -7,6 +7,12 @@ module Domains
       @time_speeds = time_speeds&.sort_by(&:starting) || TimeSpeed.order(:starting)
     end
 
+    def overall_game_time
+      game_start = Equipment.minimum(:created_at)
+      elapsed = game_time(game_start, now)
+      game_start + elapsed.seconds
+    end
+
     def total_active_duration(equipment)
       started = nil
       events_to_use = equipment.events_to_use
