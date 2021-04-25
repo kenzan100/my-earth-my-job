@@ -8,7 +8,9 @@
       <% end %>
     </dd>
     <dd>
-      <%= @game_time.in_time_zone(@zone).strftime("%F %T") %>
+      <span id="current_game_time">
+        <%= @game_time.in_time_zone(@zone).strftime("%F %T") %>
+      </span>
     </dd>
   </dl>
   <dl id="possession">
@@ -34,6 +36,7 @@
 <%= hidden_field_tag :starting_money, @current_val %>
 <%= hidden_field_tag :hourly_rate, @current_rate %>
 <%= hidden_field_tag :running_speed, @running_speed %>
+<%= hidden_field_tag :game_time_in_ms, @game_time.to_i * 1000 %>
 
 
 <dl>
