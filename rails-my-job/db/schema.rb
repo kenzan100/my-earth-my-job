@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_18_133037) do
+ActiveRecord::Schema.define(version: 2021_04_25_144917) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
@@ -38,9 +38,19 @@ ActiveRecord::Schema.define(version: 2021_04_18_133037) do
 
   create_table "events", force: :cascade do |t|
     t.integer "status_changed_to"
-    t.integer "equipment_id"
+    t.integer "eventable_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "eventable_type"
+  end
+
+  create_table "good_attributes", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "good_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "hourly_rate"
+    t.index ["good_id"], name: "index_good_attributes_on_good_id"
   end
 
   create_table "goods", force: :cascade do |t|
@@ -109,6 +119,7 @@ ActiveRecord::Schema.define(version: 2021_04_18_133037) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "good_attributes", "goods"
   add_foreign_key "possessions", "goods"
   add_foreign_key "spends", "goods"
 end

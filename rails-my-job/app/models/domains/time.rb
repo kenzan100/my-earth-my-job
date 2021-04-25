@@ -13,11 +13,10 @@ module Domains
       game_start + elapsed.seconds
     end
 
-    def total_active_duration(equipment)
+    # event: created_at, active|stopped
+    def total_active_duration(events_to_use)
       started = nil
-      events_to_use = equipment.events_to_use
 
-      # event: created_at, active|stopped
       diffs = events_to_use.each_with_object([]) do |ev, arr|
         started = ev.created_at if ev.active? && started.nil?
         if ev.stopped? && started

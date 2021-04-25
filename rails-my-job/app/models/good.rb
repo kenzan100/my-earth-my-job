@@ -2,6 +2,9 @@ class Good < ApplicationRecord
   has_many :possessions
   has_many :spends
 
+  has_many :events, as: :eventable
+  has_many :good_attributes
+
   include PolymorphicSelectable
 
   def self.posessing

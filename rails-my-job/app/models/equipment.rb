@@ -1,7 +1,8 @@
 class Equipment < ApplicationRecord
   has_many :references, as: :referencible
   has_many :job_attributes
-  has_many :events
+  has_many :events, as: :eventable
+
   accepts_nested_attributes_for :references, :job_attributes, :events,
                                 allow_destroy: true
 
@@ -55,7 +56,7 @@ class Equipment < ApplicationRecord
     job_attributes.each_with_object({}) do |ja, hash|
       next if ja.ditractor
 
-      hash[ja.name] = Domains::Time.new(now).total_active_duration(self)
+      hash[ja.name] = Domains::Time.new(now).total_active_duration(events_to_use)
     end
   end
 

@@ -18,6 +18,10 @@
     padding: 2rem 3rem;
 }
 
+#flash {
+    padding-bottom: 2rem;
+}
+
 .flex {
     display: flex;
 }

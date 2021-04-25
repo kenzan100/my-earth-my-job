@@ -21,6 +21,11 @@
         <%= possession.good.name %> * <%= possession.quantity %>
       </dd>
     <% end %>
+    <% @attributes.each do |attr| %>
+      <dd>
+        <%= attr.name %> * <%= attr.quantity %>
+      </dd>
+    <% end %>
   </dl>
   <dl id="skills">
     <dt>Skills</dt>
